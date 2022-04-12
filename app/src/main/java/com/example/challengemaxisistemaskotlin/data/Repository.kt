@@ -6,7 +6,7 @@ import com.example.challengemaxisistemaskotlin.data.network.ApiService
 class Repository constructor(){
     private val api = ApiService()
 
-     fun getAllBreeds (): MutableLiveData<List<String>?>? {
+     fun getAllBreeds (): MutableLiveData<ArrayList<String>?> {
         return api.getAllBreeds()
     }
 
@@ -14,7 +14,7 @@ class Repository constructor(){
         api.getAllBreeds2()
     }
 
-    fun getBreedPhoto(breeds: List<String?>): MutableLiveData<List<String>>?{
+    fun getBreedPhoto(breeds: ArrayList<String>): MutableLiveData<ArrayList<String>>?{
         return api.getBreedPhoto(breeds)
     }
 

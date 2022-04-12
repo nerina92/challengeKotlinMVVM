@@ -42,12 +42,12 @@ class ApiService {
         })
     }
 
-     fun getAllBreeds(): MutableLiveData<List<String>?>? {
+     fun getAllBreeds(): MutableLiveData<ArrayList<String>?> {
         val apiDataService: ApiDataService = retrofit.create(
             ApiDataService::class.java
         )
         val call: Call<ListBreedsData?>? = apiDataService.getAllBreeds()
-        val api_response = MutableLiveData<List<String>?>()
+        val api_response = MutableLiveData<ArrayList<String>?>()
         //call.enqueque hace que la llamada no se realice en el proceso o hilo principal, sino en uno secundario.
         call!!.enqueue(object : Callback<ListBreedsData?> {
             override fun onResponse(
@@ -72,11 +72,11 @@ class ApiService {
         return api_response
     }
 
-     fun getBreedPhoto(breeds: List<String?>): MutableLiveData<List<String>>? {
+     fun getBreedPhoto(breeds: ArrayList<String>): MutableLiveData<ArrayList<String>>? {
         val apiDataService: ApiDataService = retrofit.create(
             ApiDataService::class.java
         )
-        val api_response = MutableLiveData<List<String>>()
+        val api_response = MutableLiveData<ArrayList<String>>()
         val urls = ArrayList<String>()
         for (i in breeds.indices) {
             val call: Call<BreedImageData?>? = apiDataService.getBreedPhoto(breeds[i])
@@ -172,6 +172,5 @@ class ApiService {
 
 }
 
-private fun <T> MutableLiveData<T>.setValue(message: ArrayList<String?>?) {
 
-}
+

@@ -19,7 +19,7 @@ class CustomAdapter : RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
     private var breedList= mutableListOf<String>()
     private var context: Context? = null
 
-    fun setBreeds(breeds:List<String>){
+    fun setBreeds(breeds:ArrayList<String>){
         this.breedList=breeds.toMutableList()
     }
     fun setPhotoBreed(photos:List<String>){
@@ -37,13 +37,13 @@ class CustomAdapter : RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         holder.txtTitle.text = breedList!![position].toUpperCase(Locale.ROOT)
-        try {
+        /*try {
             Picasso.get().load(photoList!![position]).into(holder.imgView)
         } catch (ex: NullPointerException) {
             ex.printStackTrace()
         } catch (ex: IndexOutOfBoundsException) {
             ex.printStackTrace()
-        }
+        }*/
         if (context!!.javaClass.toString() == "class com.example.maxisistemaschallenge.View.MainActivity") {
             holder.itemView.setOnClickListener { v: View? ->
                 val miIntent = Intent(context, BreedsActivity::class.java)
