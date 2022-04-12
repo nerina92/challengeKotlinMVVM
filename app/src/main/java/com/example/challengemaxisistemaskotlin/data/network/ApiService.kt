@@ -42,7 +42,7 @@ class ApiService {
         })
     }
 
-    suspend fun getAllBreeds(): MutableLiveData<List<String>?>? {
+     fun getAllBreeds(): MutableLiveData<List<String>?>? {
         val apiDataService: ApiDataService = retrofit.create(
             ApiDataService::class.java
         )
@@ -72,7 +72,7 @@ class ApiService {
         return api_response
     }
 
-    suspend fun getBreedPhoto(breeds: List<String?>): MutableLiveData<List<String>>? {
+     fun getBreedPhoto(breeds: List<String?>): MutableLiveData<List<String>>? {
         val apiDataService: ApiDataService = retrofit.create(
             ApiDataService::class.java
         )
