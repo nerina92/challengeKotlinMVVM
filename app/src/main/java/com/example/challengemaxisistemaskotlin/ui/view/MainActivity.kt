@@ -1,22 +1,17 @@
 package com.example.challengemaxisistemaskotlin.ui.modelView.view
 
-import android.app.Activity
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengemaxisistemaskotlin.R
-import com.example.challengemaxisistemaskotlin.data.Repository
 import com.example.challengemaxisistemaskotlin.databinding.ActivityMainBinding
 import com.example.challengemaxisistemaskotlin.ui.modelView.BreedsViewModel
-import com.example.challengemaxisistemaskotlin.ui.modelView.BreedsViewModelFactory
 import com.example.challengemaxisistemaskotlin.ui.view.CustomAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private val adapter = CustomAdapter()
@@ -24,8 +19,10 @@ class MainActivity : AppCompatActivity() {
     private var recyclerView: RecyclerView? = null
     var progressDialog: ProgressDialog? = null
     var breeds: List<String>? =null
-    var filterbreeds:kotlin.collections.MutableList<kotlin.String?>? = null
-    lateinit var viewModel:BreedsViewModel
+    //var filterbreeds:kotlin.collections.MutableList<kotlin.String?>? = null
+
+    //USO DE KOIN
+    private var viewModel:BreedsViewModel by viewModel()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,14 +37,9 @@ class MainActivity : AppCompatActivity() {
         progressDialog!!.show()
 
         recyclerView = findViewById(R.id.customRecyclerView)
-        viewModel = ViewModelProvider(this, BreedsViewModelFactory(Repository())).get(BreedsViewModel::class.java)
+       // viewModel = ViewModelProvider(this, BreedsViewModelFactory(Repository(get()))).get(BreedsViewModel::class.java)
+
         binding.customRecyclerView.adapter=adapter
-      /*  viewModel.breeds.observe(this, Observer {
-            println("onCreate $it")
-            if (it != null) {
-                adapter.setBreeds(it)
-            }
-        })*/
         viewModel.getBreeds()
         setupViewModel()
     }
@@ -112,6 +104,9 @@ class MainActivity : AppCompatActivity() {
             )
         )
     }
+}
+
+
 }
 
 

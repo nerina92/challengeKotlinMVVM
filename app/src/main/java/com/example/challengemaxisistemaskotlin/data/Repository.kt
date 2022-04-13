@@ -3,7 +3,7 @@ package com.example.challengemaxisistemaskotlin.data
 import androidx.lifecycle.MutableLiveData
 import com.example.challengemaxisistemaskotlin.data.network.ApiService
 
-class Repository constructor(){
+class Repository(get: Any) {
     private val api = ApiService()
 
      fun getAllBreeds (): MutableLiveData<ArrayList<String>?> {

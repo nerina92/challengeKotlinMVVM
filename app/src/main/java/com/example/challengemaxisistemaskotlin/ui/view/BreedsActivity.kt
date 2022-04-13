@@ -4,7 +4,6 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.challengemaxisistemaskotlin.R
 import com.example.challengemaxisistemaskotlin.data.Repository
 import com.example.challengemaxisistemaskotlin.databinding.ActivityBreedsBinding
-import com.example.challengemaxisistemaskotlin.databinding.ActivityMainBinding
 import com.example.challengemaxisistemaskotlin.ui.modelView.BreedsViewModel
 import com.example.challengemaxisistemaskotlin.ui.modelView.BreedsViewModelFactory
 import com.example.challengemaxisistemaskotlin.ui.view.CustomAdapter
@@ -38,7 +36,7 @@ class BreedsActivity : AppCompatActivity() {
         progressDialog!!.show()
 
         recyclerView = findViewById(R.id.customRecyclerView)
-        viewModel = ViewModelProvider(this, BreedsViewModelFactory(Repository())).get(BreedsViewModel::class.java)
+        viewModel = ViewModelProvider(this, BreedsViewModelFactory(Repository(get()))).get(BreedsViewModel::class.java)
         binding.customRecyclerView.adapter=adapter
 
 
