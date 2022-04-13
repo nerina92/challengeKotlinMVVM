@@ -14,10 +14,10 @@ interface ApiDataService {
      fun getBreedPhoto(@Path("breed") breed: String?): Call<BreedImageData?>?
 
     @GET("/api/breed/{breed}/list")
-    suspend fun getSubBreeds(@Path("breed") breed: String?): Call<ListBreedsData?>?
+    fun getSubBreeds(@Path("breed") breed: String?): Call<ListBreedsData?>?
 
     @GET("/api/breed/{breed}/{sub_breed}/images/random")
-    suspend fun getSubBreedPhoto(
+    fun getSubBreedPhoto(
         @Path("breed") breed: String?,
         @Path("sub_breed") sub_breed: String?
     ): Call<BreedImageData?>?

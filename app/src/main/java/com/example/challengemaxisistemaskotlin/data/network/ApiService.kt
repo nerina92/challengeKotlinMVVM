@@ -19,7 +19,7 @@ class ApiService {
     }*/
 
 
-    suspend fun getAllBreeds2() {
+     fun getAllBreeds2() {
         val apiDataService: ApiDataService = retrofit.create(
             ApiDataService::class.java
         )
@@ -56,8 +56,8 @@ class ApiService {
             ) {
                 //Llamada exitosa
                 val respuesta: ListBreedsData? = response.body()
-                System.out.println("RESPUESTA: " + respuesta.toString())
-                //como hago el get al atributo message?
+                println("RESPUESTA: " + respuesta.toString())
+
                 if (respuesta != null) {
                     api_response.setValue(respuesta.message)
                 }
@@ -66,7 +66,8 @@ class ApiService {
             override fun onFailure(call: Call<ListBreedsData?>, t: Throwable) {
                 //Resultado erroneo
                 println("ERROR CALL RETROFIT" + t.fillInStackTrace())
-                api_response.setValue(null)
+                var empty_list= ArrayList<String>()
+                api_response.setValue(empty_list)
             }
         })
         return api_response
@@ -105,12 +106,12 @@ class ApiService {
         return api_response
     }
 
-    suspend fun getSubbreeds(breed: String?): MutableLiveData<List<String>?>? {
+     fun getSubbreeds(breed: String?): MutableLiveData<ArrayList<String>?>? {
         val apiDataService: ApiDataService = retrofit.create(
             ApiDataService::class.java
         )
         val call: Call<ListBreedsData?>? = apiDataService.getSubBreeds(breed)
-        val api_response = MutableLiveData<List<String>?>()
+        val api_response = MutableLiveData<ArrayList<String>?>()
         //call.enqueque hace que la llamada no se realice en el proceso o hilo principal, sino en uno secundario.
         call!!.enqueue(object : Callback<ListBreedsData?> {
             override fun onResponse(
@@ -119,7 +120,7 @@ class ApiService {
             ) {
                 //Llamada exitosa
                 val respuesta: ListBreedsData? = response.body()
-                System.out.println("RESPUESTA: " + respuesta.toString())
+                println("RESPUESTA SUBRAZAS: " + respuesta.toString())
                 if (respuesta != null) {
                     api_response.setValue(respuesta.message)
                 }
@@ -128,17 +129,18 @@ class ApiService {
             override fun onFailure(call: Call<ListBreedsData?>, t: Throwable) {
                 //Resultado erroneo
                 println("ERROR CALL RETROFIT" + t.fillInStackTrace())
-                api_response.setValue(null)
+                var empty_list= ArrayList<String>()
+                api_response.setValue(empty_list)
             }
         })
         return api_response
     }
 
-    suspend fun getSubbreedPhoto(breed: String?, breeds: List<String?>): MutableLiveData<List<String>>? {
+     fun getSubbreedPhoto(breed: String?, breeds: ArrayList<String>): MutableLiveData<ArrayList<String>>? {
         val apiDataService: ApiDataService = retrofit.create(
             ApiDataService::class.java
         )
-        val api_response = MutableLiveData<List<String>>()
+        val api_response = MutableLiveData<ArrayList<String>>()
         val urls = ArrayList<String>()
         for (i in breeds.indices) {
             val call: Call<BreedImageData?>? = apiDataService.getSubBreedPhoto(
@@ -156,7 +158,7 @@ class ApiService {
                     if (imageData != null) {
                         imageData.url?.let { urls.add(it) }
                     }
-                    System.out.println(imageData.toString())
+                    println("FOTO DESDE LA API: $imageData.toString()")
                     api_response.setValue(urls)
                 }
 

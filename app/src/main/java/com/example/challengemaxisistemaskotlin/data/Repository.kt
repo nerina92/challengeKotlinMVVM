@@ -18,10 +18,10 @@ class Repository constructor(){
         return api.getBreedPhoto(breeds)
     }
 
-    suspend fun getSubbreedPhoto (breed: String?, breeds: List<String?>){
-        api.getSubbreedPhoto(breed,breeds)
+     fun getSubbreedPhoto (breed: String?, breeds: ArrayList<String>): MutableLiveData<ArrayList<String>>? {
+        return api.getSubbreedPhoto(breed,breeds)
     }
-    suspend fun getSubbreeds (breed: String?){
-        api.getSubbreeds(breed)
+     fun getSubbreeds (breed: String): MutableLiveData<ArrayList<String>?>? {
+        return api.getSubbreeds(breed)
     }
 }

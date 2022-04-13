@@ -18,6 +18,7 @@ class CustomAdapter : RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
     private var photoList= mutableListOf<String>()
     private var breedList= mutableListOf<String>()
     private var context: Context? = null
+    private var context_position=""//razas si estoy en MainActivity, subrazas si estoy en BreedsActivity
 
     fun setBreeds(breeds:ArrayList<String>){
         this.breedList=breeds.toMutableList()
@@ -28,6 +29,9 @@ class CustomAdapter : RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
     fun setContext(context: Context){
         this.context=context
     }
+    fun setPosition(position: String){
+        this.context_position=position
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -37,14 +41,16 @@ class CustomAdapter : RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         holder.txtTitle.text = breedList!![position].toUpperCase(Locale.ROOT)
-        /*try {
-            Picasso.get().load(photoList!![position]).into(holder.imgView)
+        try {
+            Picasso.get().load(photoList[position]).into(holder.imgView)
         } catch (ex: NullPointerException) {
             ex.printStackTrace()
         } catch (ex: IndexOutOfBoundsException) {
             ex.printStackTrace()
-        }*/
-        if (context!!.javaClass.toString() == "class com.example.maxisistemaschallenge.View.MainActivity") {
+        }
+        println("position = $context_position")
+        if (context_position.equals("razas")) {
+            println("Mando a la actividad de subrazas")
             holder.itemView.setOnClickListener { v: View? ->
                 val miIntent = Intent(context, BreedsActivity::class.java)
                 miIntent.putExtra("selectBreed", breedList!![position])

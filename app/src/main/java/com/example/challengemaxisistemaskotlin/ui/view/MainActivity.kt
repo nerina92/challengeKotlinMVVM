@@ -42,14 +42,14 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.customRecyclerView)
         viewModel = ViewModelProvider(this, BreedsViewModelFactory(Repository())).get(BreedsViewModel::class.java)
         binding.customRecyclerView.adapter=adapter
-        viewModel.breeds.observe(this, Observer {
+      /*  viewModel.breeds.observe(this, Observer {
             println("onCreate $it")
             if (it != null) {
                 adapter.setBreeds(it)
             }
-        })
+        })*/
         viewModel.getBreeds()
-       // setupViewModel()
+        setupViewModel()
     }
 
      fun setupViewModel (){
@@ -58,10 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         /*Con este método se pueden observar los datos en vivo para actualizar la pantalla de la
         interfaz de usuario cada vez que haya un cambio en los datos de caché.*/
-        val repository = Repository()
 
-
-         viewModel.getBreeds()
         viewModel.breeds.observe(this) { breeds ->
 
             if (breeds != null) {
@@ -73,8 +70,8 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    /*viewModel.getBreedPhoto(breeds)
-                    viewModel.breedsPhoto.observe(context) { photos ->
+                    viewModel.getBreedPhoto(breeds)
+                    viewModel.breedsPhoto.observe(this) { photos ->
                         if (photos.isEmpty()) {
                             progressDialog?.dismiss()
                             Toast.makeText(
@@ -82,13 +79,13 @@ class MainActivity : AppCompatActivity() {
                                 "Algo saió mal, seguro puedes volver a intentarlo2!",
                                 Toast.LENGTH_SHORT
                             ).show()
-                        } else {*/
+                        } else {
                             progressDialog?.dismiss()
                             // Toast.makeText(MainActivity.this,"Imagenes listas para mostrar",Toast.LENGTH_SHORT).show();
 
-                            generateDataList(breeds/*, photos*/)
-                       // }
-                    //}
+                            generateDataList(breeds, photos)
+                       }
+                    }
                 }
             }
         }
@@ -97,13 +94,13 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun generateDataList(breedsList: List<String>?/*, photoList: List<String>*/) {
+    private fun generateDataList(breedsList: ArrayList<String>?, photoList: ArrayList<String>) {
         breeds = breedsList
-        //adapter = CustomAdapter()
+        adapter.setPosition("razas")
         if (breedsList != null) {
-            //adapter!!.setBreeds(breedsList)
+            adapter!!.setBreeds(breedsList)
         }
-        //adapter!!.setPhotoBreed(photoList)
+        adapter!!.setPhotoBreed(photoList)
         adapter!!.setContext(this)
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         recyclerView!!.layoutManager = layoutManager
