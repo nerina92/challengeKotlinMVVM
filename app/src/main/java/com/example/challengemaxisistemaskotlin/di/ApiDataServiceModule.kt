@@ -12,6 +12,6 @@ var apiDataServiceModule=module{
 
 }
 fun provideApiDataService(retrofit: Retrofit, apiService: Class<ApiDataService>) =
-    createService(retrofit, apiService)
+    createDataService(retrofit, apiService)
 
 fun <T> createDataService(retrofit: Retrofit, serviceClass: Class<T>): T = retrofit.create(serviceClass)
