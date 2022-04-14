@@ -14,13 +14,15 @@ import com.example.challengemaxisistemaskotlin.databinding.ActivityBreedsBinding
 import com.example.challengemaxisistemaskotlin.ui.modelView.BreedsViewModel
 import com.example.challengemaxisistemaskotlin.ui.modelView.BreedsViewModelFactory
 import com.example.challengemaxisistemaskotlin.ui.view.CustomAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BreedsActivity : AppCompatActivity() {
     private val adapter = CustomAdapter()
     private lateinit var binding: ActivityBreedsBinding
     private var recyclerView: RecyclerView? = null
     var progressDialog: ProgressDialog? = null
-    lateinit var viewModel: BreedsViewModel
+    //lateinit var viewModel: BreedsViewModel
+    private val viewModel:BreedsViewModel by viewModel()
     var breeds: ArrayList<String>? =null
     var breed:String?=""
 
@@ -36,7 +38,7 @@ class BreedsActivity : AppCompatActivity() {
         progressDialog!!.show()
 
         recyclerView = findViewById(R.id.customRecyclerView)
-        viewModel = ViewModelProvider(this, BreedsViewModelFactory(Repository(get()))).get(BreedsViewModel::class.java)
+        //viewModel = ViewModelProvider(this, BreedsViewModelFactory(Repository(get()))).get(BreedsViewModel::class.java)
         binding.customRecyclerView.adapter=adapter
 
 

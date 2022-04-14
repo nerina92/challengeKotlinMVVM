@@ -12,7 +12,8 @@ import com.example.challengemaxisistemaskotlin.databinding.ActivityMainBinding
 import com.example.challengemaxisistemaskotlin.ui.modelView.BreedsViewModel
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
-import org.koin.androidx.viewmodel.ext.android.viewModel as viewModel1
+import org.koin.androidx.viewmodel.ext.android.viewModel as viewModel
+
 
 class MainActivity : AppCompatActivity() {
     private val adapter = CustomAdapter()
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     //var filterbreeds:kotlin.collections.MutableList<kotlin.String?>? = null
 
     //USO DE KOIN
-    private var viewModel:BreedsViewModel by viewModel()
+    private val viewModel:BreedsViewModel by viewModel()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

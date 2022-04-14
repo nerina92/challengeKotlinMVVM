@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.challengemaxisistemaskotlin.data.Repository
+import com.example.challengemaxisistemaskotlin.ui.view.MainActivity
 import kotlinx.coroutines.launch
+import kotlin.reflect.KProperty
 
 class BreedsViewModel constructor(private val repository : Repository):ViewModel(){
     var breeds= MutableLiveData<ArrayList<String>?>()
@@ -40,4 +42,6 @@ class BreedsViewModel constructor(private val repository : Repository):ViewModel
              subBreedsPhoto=subbreeds?.let { repository.getSubbreedPhoto(breed, it) }!!
         }
     }
+
+
 }
