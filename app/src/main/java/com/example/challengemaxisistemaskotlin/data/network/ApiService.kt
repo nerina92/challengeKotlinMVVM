@@ -10,6 +10,9 @@ import retrofit2.Response
 
 class ApiService {
     private val retrofit = RetrofitHelper.getRetrofit()
+    val apiDataService: ApiDataService = retrofit.create(
+        ApiDataService::class.java
+    )
 
     /*suspend fun getQuotes(): List<QuoteModel> {
         return withContext(Dispatchers.IO) {
@@ -20,9 +23,7 @@ class ApiService {
 
 
      fun getAllBreeds2() {
-        val apiDataService: ApiDataService = retrofit.create(
-            ApiDataService::class.java
-        )
+
         val call: Call<ListBreedsData?>? = apiDataService.getAllBreeds()
         call!!.enqueue(object : Callback<ListBreedsData?> {
             override fun onResponse(
@@ -43,9 +44,7 @@ class ApiService {
     }
 
      fun getAllBreeds(): MutableLiveData<ArrayList<String>?> {
-        val apiDataService: ApiDataService = retrofit.create(
-            ApiDataService::class.java
-        )
+
         val call: Call<ListBreedsData?>? = apiDataService.getAllBreeds()
         val api_response = MutableLiveData<ArrayList<String>?>()
         //call.enqueque hace que la llamada no se realice en el proceso o hilo principal, sino en uno secundario.
@@ -74,9 +73,7 @@ class ApiService {
     }
 
      fun getBreedPhoto(breeds: ArrayList<String>): MutableLiveData<ArrayList<String>>? {
-        val apiDataService: ApiDataService = retrofit.create(
-            ApiDataService::class.java
-        )
+
         val api_response = MutableLiveData<ArrayList<String>>()
         val urls = ArrayList<String>()
         for (i in breeds.indices) {
@@ -107,9 +104,7 @@ class ApiService {
     }
 
      fun getSubbreeds(breed: String?): MutableLiveData<ArrayList<String>?>? {
-        val apiDataService: ApiDataService = retrofit.create(
-            ApiDataService::class.java
-        )
+
         val call: Call<ListBreedsData?>? = apiDataService.getSubBreeds(breed)
         val api_response = MutableLiveData<ArrayList<String>?>()
         //call.enqueque hace que la llamada no se realice en el proceso o hilo principal, sino en uno secundario.
@@ -137,9 +132,7 @@ class ApiService {
     }
 
      fun getSubbreedPhoto(breed: String?, breeds: ArrayList<String>): MutableLiveData<ArrayList<String>>? {
-        val apiDataService: ApiDataService = retrofit.create(
-            ApiDataService::class.java
-        )
+
         val api_response = MutableLiveData<ArrayList<String>>()
         val urls = ArrayList<String>()
         for (i in breeds.indices) {
