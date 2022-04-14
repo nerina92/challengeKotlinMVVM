@@ -8,11 +8,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ApiService {
-    private val retrofit = RetrofitHelper.getRetrofit()
+class ApiService (private val apiDataService: ApiDataService){
+    /*private val retrofit = RetrofitHelper.getRetrofit()
     val apiDataService: ApiDataService = retrofit.create(
         ApiDataService::class.java
-    )
+    )*/
 
     /*suspend fun getQuotes(): List<QuoteModel> {
         return withContext(Dispatchers.IO) {

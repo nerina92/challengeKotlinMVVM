@@ -10,10 +10,6 @@ class Repository constructor(private val api:ApiService){
         return api.getAllBreeds()
     }
 
-    suspend fun getAllBreeds2(){
-        api.getAllBreeds2()
-    }
-
     fun getBreedPhoto(breeds: ArrayList<String>): MutableLiveData<ArrayList<String>>?{
         return api.getBreedPhoto(breeds)
     }
