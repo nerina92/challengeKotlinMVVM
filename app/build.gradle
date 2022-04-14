@@ -58,6 +58,8 @@ dependencies {
     implementation "io.insert-koin:koin-android-compat:${versions.koin}"
     // Koin for Jetpack WorkManager
     implementation "io.insert-koin:koin-androidx-workmanager:${versions.koin}"
+    //Koin ViewModel
+   // implementation "org.koin:koin-androidx-viewmodel:${versions.koin}"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

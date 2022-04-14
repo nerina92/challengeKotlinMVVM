@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.challengemaxisistemaskotlin.ui.modelView.view.MainActivity"
+            android:name="com.example.challengemaxisistemaskotlin.ui.view.MainActivity"
             android:exported="false"></activity>
     </application>
 

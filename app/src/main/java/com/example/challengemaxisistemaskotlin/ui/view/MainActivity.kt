@@ -1,4 +1,4 @@
-package com.example.challengemaxisistemaskotlin.ui.modelView.view
+package com.example.challengemaxisistemaskotlin.ui.view
 
 import android.app.ProgressDialog
 import android.os.Bundle
@@ -10,8 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.challengemaxisistemaskotlin.R
 import com.example.challengemaxisistemaskotlin.databinding.ActivityMainBinding
 import com.example.challengemaxisistemaskotlin.ui.modelView.BreedsViewModel
-import com.example.challengemaxisistemaskotlin.ui.view.CustomAdapter
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
+import org.koin.androidx.viewmodel.ext.android.viewModel as viewModel1
 
 class MainActivity : AppCompatActivity() {
     private val adapter = CustomAdapter()
@@ -38,7 +39,6 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.customRecyclerView)
        // viewModel = ViewModelProvider(this, BreedsViewModelFactory(Repository(get()))).get(BreedsViewModel::class.java)
-
         binding.customRecyclerView.adapter=adapter
         viewModel.getBreeds()
         setupViewModel()
@@ -74,17 +74,13 @@ class MainActivity : AppCompatActivity() {
                         } else {
                             progressDialog?.dismiss()
                             // Toast.makeText(MainActivity.this,"Imagenes listas para mostrar",Toast.LENGTH_SHORT).show();
-
                             generateDataList(breeds, photos)
                        }
                     }
                 }
             }
         }
-
     }
-
-
 
     private fun generateDataList(breedsList: ArrayList<String>?, photoList: ArrayList<String>) {
         breeds = breedsList
@@ -106,7 +102,16 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+/*private operator fun <T, V> ReadWriteProperty<T, V>.getValue(t: T, property: KProperty<V?>): V {
+return this.getValue(t,property)
+}
+
+private operator fun Any.setValue(mainActivity: MainActivity, property: KProperty<*>, breedsViewModel: BreedsViewModel) {
 
 }
+
+private operator fun Any.getValue(mainActivity: MainActivity, property: KProperty<*>): BreedsViewModel {
+return this.getValue(mainActivity,property)
+}*/
 
 

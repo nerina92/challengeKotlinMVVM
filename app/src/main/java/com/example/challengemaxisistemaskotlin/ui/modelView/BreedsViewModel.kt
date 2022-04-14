@@ -11,6 +11,7 @@ class BreedsViewModel constructor(private val repository : Repository):ViewModel
     var breedsPhoto=MutableLiveData<ArrayList<String>>()
     var subbreeds = MutableLiveData<ArrayList<String>?>()
     var subBreedsPhoto=MutableLiveData<ArrayList<String>>()
+
     /*Los métodos siguientes llaman al repositorio desde el ModelView*/
      fun getBreeds() {
         //repository.getAllBreeds2();
