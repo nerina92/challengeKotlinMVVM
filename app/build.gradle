@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -60,6 +61,7 @@ dependencies {
     implementation "io.insert-koin:koin-androidx-workmanager:${versions.koin}"
     // Room
     implementation "androidx.room:room-runtime:${versions.room}"
+    kapt "androidx.room:room-compiler:${versions.room}"
     annotationProcessor "androidx.room:room-compiler:${versions.room}"
 
     testImplementation 'junit:junit:4.13.2'
