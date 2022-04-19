@@ -10,15 +10,15 @@ import com.example.challengemaxisistemaskotlin.room.ImageDao
 import com.example.challengemaxisistemaskotlin.room.SubBreedDao
 
 val databaseModule = module {
-   /* fun provideDataBase(application: Application): BreedsRoomDatabase {
+    fun provideDataBase(application: Application): BreedsRoomDatabase {
         return Room.databaseBuilder(application, BreedsRoomDatabase::class.java, "breeds_database")
             //.fallbackToDestructiveMigration()
             .build()
-    }*/
-
-    single {
-        BreedsRoomDatabase.getDatabase(androidApplication())
     }
+    single { provideDataBase(androidApplication()) }
+    /*single {
+        BreedsRoomDatabase.getDatabase(androidApplication())
+    }*/
     fun provideBreedDao(dataBase: BreedsRoomDatabase): BreedDao {
         return dataBase.breedDao()
     }
@@ -28,7 +28,7 @@ val databaseModule = module {
     fun provideSubBreedDao(dataBase: BreedsRoomDatabase): SubBreedDao {
         return dataBase.subBreedDao()
     }
-    //single { provideDataBase(androidApplication()) }
+
     single { provideBreedDao(get()) }
     single { provideImageDao(get()) }
     single { provideSubBreedDao(get()) }
