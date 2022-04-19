@@ -15,7 +15,7 @@ val repositoryModule = module {
 
     single { provideApiServiceRepository(get()) }*/
     factory{
-        Repository(get())
+        Repository(get(),get(), get(),get())
     }
 }
 

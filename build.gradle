@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        versions = [koin: '3.1.2']
+        versions = [koin: '3.1.2', room: '2.4.2']
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
