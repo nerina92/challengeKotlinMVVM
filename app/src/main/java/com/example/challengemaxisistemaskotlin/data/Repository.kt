@@ -1,119 +1,155 @@
 package com.example.challengemaxisistemaskotlin.data
 
 import androidx.lifecycle.MutableLiveData
-import com.example.challengemaxisistemaskotlin.data.network.ApiDataService
 import com.example.challengemaxisistemaskotlin.data.network.ApiService
-import com.example.challengemaxisistemaskotlin.model.ListBreedsData
 import com.example.challengemaxisistemaskotlin.room.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.util.*
+import kotlin.collections.ArrayList
 
 class Repository constructor(private val api:ApiService,
                              private val daoBreeds:BreedDao,
                              private val daoImage:ImageDao,
-                             private val daoSubBreed: SubBreedDao,
-                             private val apiDataService: ApiDataService){
+                             private val daoSubBreed: SubBreedDao){
+    //private val api = ApiService()
 
-
-     suspend fun getAllBreeds (): MutableLiveData<ArrayList<String>?> {
-         val call: Call<ListBreedsData?>? = apiDataService.getAllBreeds()
-         val api_response = MutableLiveData<ArrayList<String>?>()
-         //call.enqueque hace que la llamada no se realice en el proceso o hilo principal, sino en uno secundario.
-         call!!.enqueue(object : Callback<ListBreedsData?> {
-             override fun onResponse(
-                 call: Call<ListBreedsData?>,
-                 response: Response<ListBreedsData?>
-             ) {
-                 //Llamada exitosa
-                 val respuesta: ListBreedsData? = response.body()
-                 println("RESPUESTA: " + respuesta.toString())
-
-                 if (respuesta != null) {
-                     api_response.setValue(respuesta.message)
-                     insertBreedsRoom(respuesta.message)
-                 }else{
-                     var empty_list= ArrayList<String>()
-                     api_response.setValue(empty_list)
-                 }
+     suspend fun getAllBreeds (): ArrayList<String> {
+         var retorno: java.util.ArrayList<String>
+         val response = api.getAllBreeds()
+         if(response.isEmpty()){
+             //traer de la base de datos
+             retorno=getBreedsRoom()
+         }else{
+             retorno=response
+             //lo mando al IO thread
+             withContext(Dispatchers.IO){
+                 insertBreedsRoom(retorno)
              }
-
-             override fun onFailure(call: Call<ListBreedsData?>, t: Throwable) {
-                 //Resultado erroneo
-                 println("ERROR CALL RETROFIT" + t.fillInStackTrace())
-                 var empty_list= ArrayList<String>()
-                 api_response.setValue(empty_list)
-             }
-         })
-         return api_response
+         }
+         return retorno
     }
 
-    suspend fun getBreedPhoto(breeds: ArrayList<String>): MutableLiveData<ArrayList<String>>?{
-        val lista:MutableLiveData<ArrayList<String>>?
-        lista=api.getBreedPhoto(breeds)
-        if (lista != null) {
-           // if(lista.value!!.size>0) {
-             //   insertPhotos(lista.value!!,breeds)
-            //}else{
-               // lista.postValue(getBreedsPhotoRoom())
-            //}
+    suspend fun getBreedPhoto(breeds: ArrayList<String>): ArrayList<String>{
+        var retorno = arrayListOf<String>()
+        for(i in breeds.indices){
+            val response = api.getBreedPhoto(breeds[i])
+            if(response != "")
+                retorno.add(response)
         }
-        /*lista!!.observe(this){
-            b-> if (breeds != null) {
-                if (!breeds.isEmpty()) {
-                    insertPhotos(b,breeds)
-                }
+        if(retorno.isEmpty()){
+            //traer de la base de datos
+            retorno=getBreedsPhotoRoom(breeds,true)
+        }else{
+            //lo mando al IO thread
+            withContext(Dispatchers.IO){
+                insertPhotos(retorno,breeds, true)
             }
-        }*/
-
-        return lista
-    }
-
-    private suspend fun insertPhotos(photos: ArrayList<String>, breeds: ArrayList<String>) {
-        for(i in photos.indices){
-            var img=Image()
-            img.url=photos[i]
-
-            var id=daoImage.insert(img)//daoImage.obtenerMaxId()
-            println("list obtenida de obtenerMaxId():$id")
-            /*for(j in list.indices){
-                println("${list[j].idImage} - ${list[j].url}")
-            }*/
-            daoBreeds.update(id,breeds[i])
         }
-
+        return retorno
     }
-
-    fun getSubbreedPhoto (breed: String?, breeds: ArrayList<String>): MutableLiveData<ArrayList<String>>? {
-        return api.getSubbreedPhoto(breed,breeds)
-    }
-     fun getSubbreeds (breed: String): MutableLiveData<ArrayList<String>?>? {
-        return api.getSubbreeds(breed)
-    }
-
-    fun getBreedsRoom():ArrayList<String>{
-        var listBreeds =daoBreeds.getBreeds()
-        var listNombres = ArrayList<String>()
-        for (i in listBreeds.indices){
-            listNombres.add(listBreeds.get(i).breedName)
+    suspend fun getSubbreeds (breed: String): ArrayList<String> {
+        var retorno: ArrayList<String>
+        var response=api.getSubbreeds(breed)
+        if(response.isEmpty()){
+            //traer de la base de datos
+            retorno=getSubBreedsRoom(breed)
+        }else{
+            retorno=response
+            //lo mando al IO thread
+            withContext(Dispatchers.IO){
+                insertSubBreedsRoom(retorno, breed)
+            }
         }
+        return retorno
+    }
+
+
+    suspend fun getSubbreedPhoto (breed: String, breeds: ArrayList<String>): ArrayList<String> {
+        var retorno = arrayListOf<String>()
+        for(i in breeds.indices){
+            val response = api.getSubbreedPhoto(breed,breeds[i])
+            if(response != "")
+                retorno.add(response)
+        }
+        if(retorno.isEmpty()){
+            //traer de la base de datos
+            retorno=getBreedsPhotoRoom(breeds, false)
+        }else{
+            //lo mando al IO thread
+            withContext(Dispatchers.IO){
+                insertPhotos(retorno,breeds, false)
+            }
+        }
+        return retorno
+    }
+
+
+   suspend fun getBreedsRoom():ArrayList<String>{
+       var listNombres = ArrayList<String>()
+       withContext(Dispatchers.IO) {
+           for (i in daoBreeds.getBreeds().indices) {
+               listNombres.add(daoBreeds.getBreeds()[i].breedName)
+           }
+       }
         return listNombres
     }
-     fun insertBreedsRoom(value: ArrayList<String>) {
+    suspend fun insertBreedsRoom(value: ArrayList<String>) {
         var breed:Breed
         for (i in value.indices){
-            breed=Breed(value[i])
+            breed=Breed()
+            breed.breedName=value[i]
             daoBreeds.insert(breed)
         }
 
     }
-    fun getBreedsPhotoRoom(): ArrayList<String> {
-        var listBreeds =daoBreeds.getBreeds()
+   suspend fun getBreedsPhotoRoom(breeds:ArrayList<String>, isBreed: Boolean): ArrayList<String> {
         var listPhothos = ArrayList<String>()
-        for(i in listBreeds.indices){
-            listPhothos.add(daoImage.getImage(listBreeds[i].idImage).url)
-        }
+       var id:Int
+       withContext(Dispatchers.IO) {
+           for(i in breeds.indices){
+               if(isBreed) {
+                   id = daoBreeds.searchImage(breeds[i])
+               }else{
+                   id=daoSubBreed.searchImage(breeds[i])
+               }
+               listPhothos.add(daoImage.getImage(id).url)
+           }
+       }
         return listPhothos
     }
+    private suspend fun insertPhotos(photos: ArrayList<String>, breeds: ArrayList<String> , isBreed : Boolean) {
+        for(i in photos.indices){
+            var img=Image()
+            img.url=photos[i]
+            var id=daoImage.insert(img)//daoImage.obtenerMaxId()
+            println("list obtenida de obtenerMaxId():$id")
+            if(isBreed){
+                daoBreeds.update(id,breeds[i])
+            }else{
+                daoSubBreed.update(id, breeds[i])
+            }
+        }
+    }
+    suspend fun insertSubBreedsRoom(value: ArrayList<String>, breed:String) {
+        var subBreed : SubBreed
+        val id = daoBreeds.searchId(breed.lowercase(Locale.getDefault()))
+        for (i in value.indices) {
+            subBreed = SubBreed()
+            subBreed.subBredName = value[i]
+            subBreed.idBreed = id
+            daoSubBreed.insert(subBreed)
+        }
+    }
 
+    suspend fun getSubBreedsRoom(breed:String):ArrayList<String>{
+        var listSubBreeds = ArrayList<String>()
+        withContext(Dispatchers.IO){
+            var id = daoBreeds.searchId(breed)
+            for (i in daoSubBreed.searchSubBreeds(id).indices){
+                listSubBreeds.add(daoSubBreed.getSubBreeds()[i].subBredName)
+            }
+        }
+        return listSubBreeds
+    }
 }

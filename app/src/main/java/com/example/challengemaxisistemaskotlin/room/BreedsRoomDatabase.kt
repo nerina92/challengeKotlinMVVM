@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [Breed::class,Image::class,SubBreed::class], version = 1, exportSchema = false)
-public abstract class BreedsRoomDatabase: RoomDatabase() {
+abstract class BreedsRoomDatabase: RoomDatabase() {
     abstract fun breedDao():BreedDao
     abstract fun subBreedDao():SubBreedDao
     abstract fun imageDao():ImageDao

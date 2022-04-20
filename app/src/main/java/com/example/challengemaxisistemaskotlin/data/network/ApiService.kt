@@ -4,9 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import com.example.challengemaxisistemaskotlin.core.RetrofitHelper
 import com.example.challengemaxisistemaskotlin.model.BreedImageData
 import com.example.challengemaxisistemaskotlin.model.ListBreedsData
+import com.example.challengemaxisistemaskotlin.room.SubBreed
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 class ApiService (private val apiDataService: ApiDataService){
     /*private val retrofit = RetrofitHelper.getRetrofit()
@@ -21,130 +25,65 @@ class ApiService (private val apiDataService: ApiDataService){
         }
     }*/
 
-     fun getAllBreeds(): MutableLiveData<ArrayList<String>?> {
-
-        val call: Call<ListBreedsData?>? = apiDataService.getAllBreeds()
-        val api_response = MutableLiveData<ArrayList<String>?>()
-        //call.enqueque hace que la llamada no se realice en el proceso o hilo principal, sino en uno secundario.
-        call!!.enqueue(object : Callback<ListBreedsData?> {
-            override fun onResponse(
-                call: Call<ListBreedsData?>,
-                response: Response<ListBreedsData?>
-            ) {
-                //Llamada exitosa
-                val respuesta: ListBreedsData? = response.body()
-                println("RESPUESTA: " + respuesta.toString())
-
-                if (respuesta != null) {
-                    api_response.setValue(respuesta.message)
-
-                }else{
-                    var empty_list= ArrayList<String>()
-                    api_response.setValue(empty_list)
-                }
-            }
-
-            override fun onFailure(call: Call<ListBreedsData?>, t: Throwable) {
-                //Resultado erroneo
-                println("ERROR CALL RETROFIT" + t.fillInStackTrace())
-                var empty_list= ArrayList<String>()
-                api_response.setValue(empty_list)
-            }
-        })
-        return api_response
-    }
-
-     fun getBreedPhoto(breeds: ArrayList<String>): MutableLiveData<ArrayList<String>>? {
-
-        val api_response = MutableLiveData<ArrayList<String>>()
-        val urls = ArrayList<String>()
-        for (i in breeds.indices) {
-            val call: Call<BreedImageData?>? = apiDataService.getBreedPhoto(breeds[i])
-            //call.enqueque hace que la llamada no se realice en el proceso o hilo principal, sino en uno secundario.
-            call!!.enqueue(object : Callback<BreedImageData?> {
-                override fun onResponse(
-                    call: Call<BreedImageData?>,
-                    response: Response<BreedImageData?>
-                ) {
-                    //Llamada exitosa
-                    val imageData: BreedImageData? = response.body()
-                    if (imageData != null) {
-                        imageData.url?.let { urls.add(it) }
-                    }
-                    api_response.setValue(urls)
-                    //System.out.println("Size urls="+urls.size());
-                }
-
-                override fun onFailure(call: Call<BreedImageData?>, t: Throwable) {
-                    //Resultado erroneo
-                    println("ERROR: " + t.message)
-                    urls.add("")
-                }
-            })
+     suspend fun getAllBreeds(): ArrayList<String> {
+         //este withContext(Dispatchers.IO)
+        return withContext(Dispatchers.IO){
+            val response = apiDataService.getAllBreeds()
+            (response.body()?.message ?: ArrayList<String>()) as ArrayList<String>
         }
-        return api_response
+        /*val call: Call<ListBreedsData?>? = apiDataService.getAllBreeds()
+         val api_response = MutableLiveData<ArrayList<String>?>()
+         //call.enqueque hace que la llamada no se realice en el proceso o hilo principal, sino en uno secundario.
+         call!!.enqueue(object : Callback<ListBreedsData?> {
+             override fun onResponse(
+                 call: Call<ListBreedsData?>,
+                 response: Response<ListBreedsData?>
+             ) {
+                 //Llamada exitosa
+                 val respuesta: ListBreedsData? = response.body()
+                 println("RESPUESTA: " + respuesta.toString())
+
+                 if (respuesta != null) {
+                     api_response.setValue(respuesta.message)
+
+                 }else{
+                     var empty_list= ArrayList<String>()
+                     api_response.setValue(empty_list)
+                 }
+             }
+
+             override fun onFailure(call: Call<ListBreedsData?>, t: Throwable) {
+                 //Resultado erroneo
+                 println("ERROR CALL RETROFIT" + t.fillInStackTrace())
+                 var empty_list= ArrayList<String>()
+                 api_response.setValue(empty_list)
+             }
+         })
+         return api_response*/
+
     }
 
-     fun getSubbreeds(breed: String?): MutableLiveData<ArrayList<String>?>? {
-
-        val call: Call<ListBreedsData?>? = apiDataService.getSubBreeds(breed)
-        val api_response = MutableLiveData<ArrayList<String>?>()
-        //call.enqueque hace que la llamada no se realice en el proceso o hilo principal, sino en uno secundario.
-        call!!.enqueue(object : Callback<ListBreedsData?> {
-            override fun onResponse(
-                call: Call<ListBreedsData?>,
-                response: Response<ListBreedsData?>
-            ) {
-                //Llamada exitosa
-                val respuesta: ListBreedsData? = response.body()
-                println("RESPUESTA SUBRAZAS: " + respuesta.toString())
-                if (respuesta != null) {
-                    api_response.setValue(respuesta.message)
-                }
-            }
-
-            override fun onFailure(call: Call<ListBreedsData?>, t: Throwable) {
-                //Resultado erroneo
-                println("ERROR CALL RETROFIT" + t.fillInStackTrace())
-                var empty_list= ArrayList<String>()
-                api_response.setValue(empty_list)
-            }
-        })
-        return api_response
+     suspend fun getBreedPhoto(breed:String) : String {
+         return withContext(Dispatchers.IO){
+             val response = apiDataService.getBreedPhoto(breed)
+             (response.body()?.url ?: "")
+         }
     }
 
-     fun getSubbreedPhoto(breed: String?, breeds: ArrayList<String>): MutableLiveData<ArrayList<String>>? {
+     suspend fun getSubbreeds(breed: String): ArrayList<String> {
+         return withContext(Dispatchers.IO){
+             val response = apiDataService.getSubBreeds(breed)
+             (response.body()?.message ?: ArrayList())
+         }
 
-        val api_response = MutableLiveData<ArrayList<String>>()
-        val urls = ArrayList<String>()
-        for (i in breeds.indices) {
-            val call: Call<BreedImageData?>? = apiDataService.getSubBreedPhoto(
-                breed,
-                breeds[i]
-            )
-            //call.enqueque hace que la llamada no se realice en el proceso o hilo principal, sino en uno secundario.
-            call!!.enqueue(object : Callback<BreedImageData?> {
-                override fun onResponse(
-                    call: Call<BreedImageData?>,
-                    response: Response<BreedImageData?>
-                ) {
-                    //Llamada exitosa
-                    val imageData: BreedImageData? = response.body()
-                    if (imageData != null) {
-                        imageData.url?.let { urls.add(it) }
-                    }
-                    println("FOTO DESDE LA API: $imageData.toString()")
-                    api_response.setValue(urls)
-                }
+    }
 
-                override fun onFailure(call: Call<BreedImageData?>, t: Throwable) {
-                    //Resultado erroneo
-                    println("ERROR: " + t.message)
-                    urls.add("")
-                }
-            })
-        }
-        return api_response
+     suspend fun getSubbreedPhoto(breed: String?, subBreed: String): String {
+         return withContext(Dispatchers.IO){
+             val response = apiDataService.getSubBreedPhoto(breed,subBreed)
+             (response.body()?.url ?: "")
+         }
+
     }
 
 }

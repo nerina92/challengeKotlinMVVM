@@ -18,19 +18,19 @@ class BreedsViewModel constructor(private val repository : Repository):ViewModel
      fun getBreeds() {
         //repository.getAllBreeds2();
         viewModelScope.launch {
-            breeds = repository.getAllBreeds()
+            breeds.postValue(repository.getAllBreeds())
         }
     }
 
     fun getBreedPhoto(breeds: ArrayList<String>?) {
         viewModelScope.launch {
-            breedsPhoto= breeds?.let { repository.getBreedPhoto(it) }!!
+            breedsPhoto.postValue(breeds?.let { repository.getBreedPhoto(it) })
         }
     }
 
      fun getSubbreeds(breed: String) {
         viewModelScope.launch {
-            subbreeds= repository.getSubbreeds(breed)!!
+            subbreeds.postValue(repository.getSubbreeds(breed))
         }
     }
 
@@ -39,7 +39,7 @@ class BreedsViewModel constructor(private val repository : Repository):ViewModel
          subbreeds: ArrayList<String>?
     ) {
         viewModelScope.launch {
-             subBreedsPhoto=subbreeds?.let { repository.getSubbreedPhoto(breed, it) }!!
+             subBreedsPhoto.postValue(subbreeds?.let { repository.getSubbreedPhoto(breed, it) })
         }
     }
 
