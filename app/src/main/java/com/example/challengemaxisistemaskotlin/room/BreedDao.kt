@@ -10,10 +10,10 @@ interface BreedDao {
     fun getBreeds(): List<Breed>
 
     @Insert
-    suspend fun insert(breed: Breed)
+    fun insert(breed: Breed)
 
     @Query("UPDATE breed_table SET idImage =:idImage WHERE breedName=:breedName;")
-    suspend fun update(idImage: Int, breedName:String)
+    suspend fun update(idImage: Long, breedName:String)
 
     @Query("DELETE FROM breed_table")
     suspend fun deleteAll()

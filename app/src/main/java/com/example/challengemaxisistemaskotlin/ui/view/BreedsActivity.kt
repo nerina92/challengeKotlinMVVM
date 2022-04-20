@@ -70,11 +70,7 @@ class BreedsActivity : AppCompatActivity() {
                     empty_breeds.add("No hay subrazas")
                     empty_photos.add("https://prints.ultracoloringpages.com/f905b86a41352429807917a265044dd9.png")
                     generateDataList(empty_breeds, empty_photos)
-                /*Toast.makeText(
-                        this@BreedsActivity,
-                        "Algo saió mal, seguro puedes volver a intentarlo!",
-                        Toast.LENGTH_SHORT
-                    ).show()*/
+
                 } else {
                     viewModel.getSubbreedPhoto(breed!!, breeds)
                     //breed?.let { viewModel.getSubbreedPhoto(it,breeds) }

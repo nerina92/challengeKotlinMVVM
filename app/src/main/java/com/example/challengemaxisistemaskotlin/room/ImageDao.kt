@@ -13,11 +13,11 @@ interface ImageDao {
     fun getImage(id:Int): Image
 
     @Insert
-    suspend fun insert(image: Image)
+    suspend fun insert(image: Image) :Long
 
     @Query("DELETE FROM image_table")
     suspend fun deleteAll()
 
-    @Query("SELECT MAX(idImage)  FROM image_table")
-    suspend fun obtenerMaxId() : List<Image>
+   /* @Query("SELECT MAX(idImage)  FROM image_table")
+    suspend fun obtenerMaxId() : Int*/
 }

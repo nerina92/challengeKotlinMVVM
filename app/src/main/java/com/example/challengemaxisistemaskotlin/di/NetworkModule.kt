@@ -1,6 +1,8 @@
 package com.example.challengemaxisistemaskotlin.di
 
+import android.content.Context
 import com.example.challengemaxisistemaskotlin.data.network.ApiDataService
+import com.example.challengemaxisistemaskotlin.data.network.TimeOutInterceptor
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -13,7 +15,12 @@ import retrofit2.converter.gson.GsonConverterFactory
         //single { provideApiService(get(), get()) }
     }
 
-    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder().build()
+    //fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder().build()
+    fun provideOkHttpClient(): OkHttpClient {
+        val okHttpClientBuilder = OkHttpClient.Builder()
+        okHttpClientBuilder.interceptors().add(TimeOutInterceptor())
+        return okHttpClientBuilder.build()
+    }
 
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder().baseUrl("https://dog.ceo")

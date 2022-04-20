@@ -21,28 +21,6 @@ class ApiService (private val apiDataService: ApiDataService){
         }
     }*/
 
-
-     fun getAllBreeds2() {
-
-        val call: Call<ListBreedsData?>? = apiDataService.getAllBreeds()
-        call!!.enqueue(object : Callback<ListBreedsData?> {
-            override fun onResponse(
-                call: Call<ListBreedsData?>,
-                response: Response<ListBreedsData?>
-            ) {
-                if (response.isSuccessful()) {
-                    val modal: ListBreedsData? = response.body()
-                    System.out.println(modal.toString())
-                }
-            }
-
-            override fun onFailure(call: Call<ListBreedsData?>, t: Throwable) {
-                // displaying an error message in toast
-                println("ERROR CALL RETROFIT" + t.fillInStackTrace())
-            }
-        })
-    }
-
      fun getAllBreeds(): MutableLiveData<ArrayList<String>?> {
 
         val call: Call<ListBreedsData?>? = apiDataService.getAllBreeds()
@@ -59,6 +37,10 @@ class ApiService (private val apiDataService: ApiDataService){
 
                 if (respuesta != null) {
                     api_response.setValue(respuesta.message)
+
+                }else{
+                    var empty_list= ArrayList<String>()
+                    api_response.setValue(empty_list)
                 }
             }
 
